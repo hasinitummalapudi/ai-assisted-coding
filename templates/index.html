@@ -1,0 +1,337 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f8f1">
+  <title>Nutri AI — Eat well, feel like you</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+<nav class="nav wrap">
+  <a class="brand" href="#"><span class="mark">✳</span> nutri<span>ai</span></a>
+
+  <div class="links">
+    <a href="#planner">Meal planner</a>
+    <a href="#weekly">Weekly calendar</a>
+    <a href="#groceries">Grocery list</a>
+    <a href="#kitchen">Kitchen match</a>
+    <a href="#insights">Insights</a>
+    <a href="#history">Saved plans</a>
+  </div>
+
+  <a class="navbtn" href="#planner">Build my plan ↗</a>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div>
+      <div class="eyebrow">✳ &nbsp; YOUR PERSONAL FOOD COMPASS</div>
+      <h1>Eat well.<br><em>Feel like you.</em></h1>
+
+      <p class="intro">
+        Thoughtful meal ideas shaped around your preferences,
+        everyday routine and nutrition goals.
+      </p>
+
+      <div class="actions">
+        <a class="button" href="#planner">Create my meal plan <span>→</span></a>
+        <a class="plain" href="#how">Explore how it works ↘</a>
+      </div>
+
+      <p class="note">✦ Simple choices. More mindful meals.</p>
+    </div>
+
+    <div class="art">
+      <div class="orb"></div>
+      <div class="plate">🥗</div>
+
+      <div class="float f1">
+        ✳ <span><b>Made for you</b><small>Preference-led ideas</small></span>
+      </div>
+
+      <div class="float f2">
+        ♡ <span><b>Everyday balance</b><small>Food without the fuss</small></span>
+      </div>
+
+      <div class="caption">A little more intention<br>in every bite.</div>
+    </div>
+  </section>
+
+  <!-- INTRODUCTION -->
+  <section class="benefits wrap" id="how">
+    <article>
+      <i>◎</i>
+      <div><b>Your preferences first</b><p>Choose a food style and cuisine you enjoy.</p></div>
+    </article>
+
+    <article>
+      <i>✳</i>
+      <div><b>Smart suggestions</b><p>Get meal ideas from the food dataset.</p></div>
+    </article>
+
+    <article>
+      <i>♡</i>
+      <div><b>Easy to adjust</b><p>Swap ideas and refresh your plan.</p></div>
+    </article>
+  </section>
+
+  <!-- MEAL PLANNER -->
+  <section class="planner" id="planner">
+    <div class="wrap">
+      <div class="heading">
+        <div>
+          <div class="eyebrow">YOUR STARTING POINT</div>
+          <h2>A plan that starts with <em>you.</em></h2>
+        </div>
+        <p>Share a few details to create your sample meal plan.</p>
+      </div>
+
+      <div class="columns">
+        <form id="planForm" class="form">
+          <div class="formhead">
+            <span>01</span>
+            <div><h3>Your profile</h3><p>Just the basics to get started.</p></div>
+          </div>
+
+          <div class="fields">
+            <label>Age *
+              <input name="age" type="number" min="18" max="100" placeholder="e.g. 22" required>
+            </label>
+
+            <label>Height (cm) *
+              <input name="height" type="number" min="100" max="230" placeholder="e.g. 165" required>
+            </label>
+
+            <label>Weight (kg) *
+              <input name="weight" type="number" min="25" max="300" step=".1" placeholder="e.g. 58" required>
+            </label>
+
+            <label>Activity level
+              <select name="activity">
+                <option value="sedentary">Mostly sitting</option>
+                <option value="light">Lightly active</option>
+                <option value="moderate" selected>Moderately active</option>
+                <option value="active">Very active</option>
+              </select>
+            </label>
+
+            <label>Food preference
+              <select name="diet">
+                <option>Vegetarian</option>
+                <option>Vegan</option>
+                <option>Non-vegetarian</option>
+              </select>
+            </label>
+
+            <label>Favourite cuisine
+              <select name="cuisine">
+                <option>Indian</option>
+                <option>Mediterranean</option>
+                <option>Global</option>
+              </select>
+            </label>
+
+            <label>Meals per day
+              <select name="meals">
+                <option value="3">3 meals</option>
+                <option value="4" selected>4 meals</option>
+                <option value="5">5 meals</option>
+              </select>
+            </label>
+
+            <label>Foods to avoid
+              <input name="disliked" placeholder="e.g. mushroom, tofu">
+            </label>
+
+            <label class="full">Allergies / ingredients to exclude
+              <input name="allergies" placeholder="e.g. peanuts, milk (comma separated)">
+              <small>Enter comma-separated ingredients. Always verify food labels yourself.</small>
+            </label>
+          </div>
+
+          <button class="button submit" id="submitBtn" type="submit">
+            Generate my meal ideas →
+          </button>
+
+          <p class="privacy">
+            This demo saves plan details in its local database.
+            Do not enter sensitive personal information.
+          </p>
+        </form>
+
+        <aside class="aside">
+          <div class="plant">🌿</div>
+          <div class="eyebrow">A GENTLER APPROACH</div>
+          <h3>Healthy habits are personal.</h3>
+          <p>
+            Use these suggestions as inspiration—not strict rules.
+            The best plan is one that fits your life and needs.
+          </p>
+          <hr>
+          <p>① &nbsp; <b>Choose what works</b><br><small>Preferences guide the suggestions.</small></p>
+          <p>② &nbsp; <b>Explore new ideas</b><br><small>Try meals from the sample dataset.</small></p>
+          <p>③ &nbsp; <b>Keep it flexible</b><br><small>Swap ideas and make them your own.</small></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS AND EXTRA FEATURES -->
+  <section class="wrap result" id="results" hidden>
+    <div class="heading">
+      <div>
+        <div class="eyebrow">YOUR PERSONALIZED IDEAS</div>
+        <h2>Your plan, <em>served fresh.</em></h2>
+      </div>
+      <button class="button light" id="newPlan" type="button">Create another plan ↗</button>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <!-- MEAL IDEAS AND SMART FOOD SWAP -->
+    <div class="feature-heading">
+      <div>
+        <div class="eyebrow">MAKE IT YOURS</div>
+        <h3>Today's meal ideas</h3>
+      </div>
+      <p>Not a fan of one meal? Swap it without changing the rest.</p>
+    </div>
+
+    <div class="meals" id="mealGrid"></div>
+
+    <!-- FEATURE 2: WEEKLY MEAL CALENDAR -->
+    <section class="tool-panel" id="weekly">
+      <div class="feature-heading">
+        <div>
+          <div class="eyebrow">PLAN AHEAD</div>
+          <h3>Your 7-day meal calendar</h3>
+        </div>
+        <button class="button light" id="buildWeek" type="button">
+          Build my week ↗
+        </button>
+      </div>
+
+      <p class="muted">
+        Create a flexible weekly calendar from your meal ideas.
+      </p>
+
+      <div id="weekGrid" class="week-grid">
+        <p class="muted">Generate a meal plan, then build your week.</p>
+      </div>
+    </section>
+
+    <!-- FEATURE 3: AUTOMATIC GROCERY LIST -->
+    <section class="tool-panel" id="groceries">
+      <div class="feature-heading">
+        <div>
+          <div class="eyebrow">SHOP SMARTER</div>
+          <h3>Your automatic grocery list</h3>
+        </div>
+        <button class="button light" id="copyGroceries" type="button">
+          Copy list
+        </button>
+      </div>
+
+      <p class="muted">
+        Ingredients are collected from your current meal plan.
+      </p>
+
+      <div id="groceryList" class="grocery-grid">
+        <p class="muted">Generate a plan to create your grocery list.</p>
+      </div>
+    </section>
+
+    <p class="disclaimer">
+      Nutrition values are estimates for an educational project, not medical
+      advice. Individual needs vary; consult a qualified health professional
+      for personal dietary guidance.
+    </p>
+  </section>
+
+  <!-- FEATURE 4: INGREDIENT MATCHER -->
+  <section class="wrap kitchen-section" id="kitchen">
+    <div class="heading">
+      <div>
+        <div class="eyebrow">USE WHAT YOU HAVE</div>
+        <h2>What's in your <em>kitchen?</em></h2>
+      </div>
+      <p>Enter ingredients you already have and find matching meal ideas.</p>
+    </div>
+
+    <form id="kitchenForm" class="kitchen-form">
+      <label>Ingredients you have
+        <input name="ingredients" placeholder="e.g. rice, lentils, tomato, banana" required>
+      </label>
+      <button class="button" type="submit" id="kitchenButton">
+        Find matching meals →
+      </button>
+    </form>
+
+    <div id="kitchenResults" class="meals kitchen-results">
+      <p class="muted">Your matching meal ideas will appear here.</p>
+    </div>
+  </section>
+
+  <!-- FEATURE 5: FOOD PREFERENCE INSIGHTS -->
+  <section class="wrap insights-section" id="insights">
+    <div class="heading">
+      <div>
+        <div class="eyebrow">YOUR FOOD PATTERNS</div>
+        <h2>Preference <em>insights.</em></h2>
+      </div>
+      <button class="plain" id="refreshInsights" type="button">Refresh insights ↻</button>
+    </div>
+
+    <p class="muted">A simple summary of your saved plans—not a medical assessment.</p>
+
+    <div id="insightStats" class="stats"></div>
+
+    <div class="insight-columns">
+      <article class="insight-card">
+        <h3>Frequently saved meals</h3>
+        <div id="favoriteMeals"></div>
+      </article>
+
+      <article class="insight-card">
+        <h3>Plan preferences</h3>
+        <div id="preferenceBars"></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- SAVED PLANS -->
+  <section class="wrap history" id="history">
+    <div class="heading">
+      <div>
+        <div class="eyebrow">YOUR RECENT CREATIONS</div>
+        <h2>Saved <em>plans.</em></h2>
+      </div>
+      <button class="plain" id="refresh" type="button">Refresh history ↻</button>
+    </div>
+
+    <div id="historyList">
+      <p class="muted">Your saved plans will appear here after you generate one.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <a class="brand" href="#"><span class="mark">✳</span> nutri<span>ai</span></a>
+  <p>Made for more mindful everyday meals.</p>
+  <small>Educational demo · Not medical advice</small>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
