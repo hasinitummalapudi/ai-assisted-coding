@@ -24,8 +24,8 @@ def init_db():
                 diet TEXT,
                 cuisine TEXT,
                 created_at TEXT,
-                nutrition TEXT,
-                meals TEXT
+                nutrition_json TEXT NOT NULL DEFAULT '{}',
+                meals_json TEXT NOT NULL DEFAULT '[]'
             )
         """)
 
@@ -35,7 +35,7 @@ def save_plan(data, nutrition, meals):
         cursor = conn.execute("""
             INSERT INTO plans (
                 age, height, weight, diet, cuisine,
-                created_at, nutrition, meals
+                created_at, nutrition_json, meals_json
             )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, (
@@ -64,6 +64,8 @@ def get_recent_plans():
     plans = []
 
     for row in rows:
+        keys = row.keys()
+
         plans.append({
             "id": str(row["id"]),
             "age": row["age"],
@@ -72,8 +74,12 @@ def get_recent_plans():
             "diet": row["diet"],
             "cuisine": row["cuisine"],
             "created_at": row["created_at"],
-            "nutrition": json.loads(row["nutrition"] or "{}"),
-            "meals": json.loads(row["meals"] or "[]")
+            "nutrition": json.loads(
+                row["nutrition_json"] or "{}"
+            ),
+            "meals": json.loads(
+                row["meals_json"] or "[]"
+            )
         })
 
     return plans
