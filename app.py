@@ -1,3 +1,4 @@
+from database import init_db, save_plan, get_recent_plans
 from flask import Flask, render_template, request, jsonify
 from database import init_db, save_plan, get_recent_plans
 from recommender import recommend_meals, replace_meal, find_kitchen_meals

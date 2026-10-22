@@ -1,95 +1,79 @@
 
-import os
+import sqlite3
+from pathlib import Path
 from datetime import datetime, timezone
+import json
 
-from dotenv import load_dotenv
-from pymongo import MongoClient, DESCENDING
-from pymongo.errors import PyMongoError
+DB_PATH = Path(__file__).parent / "nutriai.db"
 
-load_dotenv()
 
-MONGODB_URI = os.getenv("MONGODB_URI")
-
-client = None
-plans_collection = None
+def get_connection():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
 
 
 def init_db():
-    global client, plans_collection
-
-    if not MONGODB_URI:
-        raise RuntimeError(
-            "MONGODB_URI is missing. Check your .env file."
-        )
-
-    client = MongoClient(
-        MONGODB_URI,
-        serverSelectionTimeoutMS=10000
-    )
-
-    # Verify that MongoDB is reachable.
-    client.admin.command("ping")
-
-    db = client["nutriai"]
-    plans_collection = db["plans"]
-
-    # Show newest plans first efficiently.
-    plans_collection.create_index(
-        [("created_at", DESCENDING)]
-    )
-
-    print("NutriAI MongoDB connected successfully!")
+    with get_connection() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS plans (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                age INTEGER,
+                height REAL,
+                weight REAL,
+                diet TEXT,
+                cuisine TEXT,
+                created_at TEXT,
+                nutrition TEXT,
+                meals TEXT
+            )
+        """)
 
 
 def save_plan(data, nutrition, meals):
-    if plans_collection is None:
-        raise RuntimeError("Call init_db() before saving plans.")
+    with get_connection() as conn:
+        cursor = conn.execute("""
+            INSERT INTO plans (
+                age, height, weight, diet, cuisine,
+                created_at, nutrition, meals
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            int(data["age"]),
+            float(data["height"]),
+            float(data["weight"]),
+            data.get("diet", "Vegetarian"),
+            data.get("cuisine", "Indian"),
+            datetime.now(timezone.utc).isoformat(),
+            json.dumps(nutrition),
+            json.dumps(meals)
+        ))
 
-    plan = {
-        "age": int(data["age"]),
-        "height": float(data["height"]),
-        "weight": float(data["weight"]),
-        "diet": data.get("diet", "Vegetarian"),
-        "cuisine": data.get("cuisine", "Indian"),
-        "created_at": datetime.now(timezone.utc),
-        "nutrition": nutrition,
-        "meals": meals
-    }
-
-    result = plans_collection.insert_one(plan)
-
-    return str(result.inserted_id)
+        return str(cursor.lastrowid)
 
 
 def get_recent_plans():
-    if plans_collection is None:
-        raise RuntimeError("Call init_db() before reading plans.")
+    with get_connection() as conn:
+        rows = conn.execute("""
+            SELECT *
+            FROM plans
+            ORDER BY id DESC
+            LIMIT 20
+        """).fetchall()
 
-    plans = plans_collection.find(
-        {},
-        {
-            "age": 1,
-            "height": 1,
-            "weight": 1,
-            "diet": 1,
-            "cuisine": 1,
-            "created_at": 1,
-            "nutrition": 1,
-            "meals": 1
-        }
-    ).sort("_id", DESCENDING).limit(20)
+    plans = []
 
-    return [
-        {
-            "id": str(plan["_id"]),
-            "age": plan.get("age"),
-            "height": plan.get("height"),
-            "weight": plan.get("weight"),
-            "diet": plan.get("diet"),
-            "cuisine": plan.get("cuisine"),
-            "created_at": plan.get("created_at"),
-            "nutrition": plan.get("nutrition", {}),
-            "meals": plan.get("meals", [])
-        }
-        for plan in plans
-    ]
+    for row in rows:
+        plans.append({
+            "id": str(row["id"]),
+            "age": row["age"],
+            "height": row["height"],
+            "weight": row["weight"],
+            "diet": row["diet"],
+            "cuisine": row["cuisine"],
+            "created_at": row["created_at"],
+            "nutrition": json.loads(row["nutrition"] or "{}"),
+            "meals": json.loads(row["meals"] or "[]")
+        })
+
+    return plans
